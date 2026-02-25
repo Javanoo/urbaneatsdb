@@ -1,5 +1,5 @@
 /* 
-* initial draft of urban eats database schema
+* urban eats database schema
 * author : Matthews Offen <matthewsoffen2@gmail.com>
 * author github : https://github/javanoo
 * date : 20 February 2026
@@ -18,7 +18,7 @@ CREATE TABLE admins (
  admin_id  INT UNSIGNED NOT NULL AUTO_INCREMENT,
  first_name  VARCHAR (50) NOT NULL,
  last_name VARCHAR (50) NOT NULL,
- email VARCHAR(100),
+ email VARCHAR(100) DEFAULT NULL,
  phone VARCHAR (10) NOT NULL,
  password_phrase VARCHAR(255) NOT NULL,
  status ENUM('active','suspended') DEFAULT  'active', 
@@ -37,7 +37,7 @@ CREATE TABLE customers (
  customer_id  INT UNSIGNED NOT NULL AUTO_INCREMENT,
  first_name  VARCHAR (50) NOT NULL,
  last_name VARCHAR (50) NOT NULL,
- email VARCHAR(100),
+ email VARCHAR(100) DEFAULT NULL,
  phone VARCHAR (10) NOT NULL,
  password_phrase VARCHAR(255) NOT NULL,
  status ENUM('active','suspended') DEFAULT  'active', 
@@ -56,7 +56,7 @@ CREATE TABLE restaurant_managers (
  restaurant_manager_id  INT UNSIGNED NOT NULL AUTO_INCREMENT,
  first_name  VARCHAR (50) NOT NULL,
  last_name VARCHAR (50) NOT NULL,
- email VARCHAR(100),
+ email VARCHAR(100) DEFAULT NULL,
  phone VARCHAR (10) NOT NULL,
  password_phrase VARCHAR(255) NOT NULL,
  status ENUM('active','suspended') DEFAULT  'active', 
@@ -75,7 +75,7 @@ CREATE TABLE delivery_riders (
  delivery_rider_id  INT UNSIGNED NOT NULL AUTO_INCREMENT,
  first_name  VARCHAR (50) NOT NULL,
  last_name VARCHAR (50) NOT NULL,
- email VARCHAR(100),
+ email VARCHAR(100) DEFAULT NULL,
  phone VARCHAR (10) NOT NULL,
  password_phrase VARCHAR(255) NOT NULL,
  status ENUM('active','suspended') DEFAULT  'active', 
@@ -94,8 +94,8 @@ CREATE TABLE opening_hours (
  opening_hour_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
  restaurant_id INT UNSIGNED NOT NULL,
  day_name ENUM('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun') NOT NULL,
- opening TIME DEFAULT NULL,
- closing TIME DEFAULT NULL,
+ opens_at TIME DEFAULT NULL,
+ closes_at TIME DEFAULT NULL,
  creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  CONSTRAINT opening_hours_pk PRIMARY KEY (opening_hour_id)
@@ -143,7 +143,7 @@ CREATE TABLE menu_items (
  name VARCHAR (250) NOT NULL, 
  description TEXT NOT NULL,
  price DECIMAL (12,2) DEFAULT 0.00,
- status ENUM('available','unavailable'),
+ status ENUM('available','unavailable') DEFAULT 'available',
  category_id INT UNSIGNED NOT NULL, 
  creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -174,12 +174,11 @@ CREATE TABLE orders (
  order_id  INT UNSIGNED NOT NULL AUTO_INCREMENT,
  restaurant_id INT UNSIGNED NOT NULL,
  customer_id INT UNSIGNED NOT NULL, 
- order_status ENUM('placed','on_the_way', 'cancelled'),
+ order_status ENUM('placed','on_the_way', 'cancelled') DEFAULT 'placed',
  total_amount DECIMAL (12,2) DEFAULT 0.00,
  delivery_rider_id INT UNSIGNED NOT NULL,
- pickup_time TIME,
- delivery_time TIME,
- payment_id INT UNSIGNED, 
+ pickup_time TIME DEFAULT NULL,
+ delivery_time TIME DEFAULT NULL, 
  creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  CONSTRAINT orders_pk PRIMARY KEY (order_id)
@@ -192,9 +191,8 @@ CREATE TABLE orders (
 CREATE TABLE payments ( 
  payment_id  INT UNSIGNED NOT NULL AUTO_INCREMENT,
  customer_id INT UNSIGNED NOT NULL,
- order_id INT UNSIGNED NOT NULL, 
- payment_amount DECIMAL (12,2) DEFAULT 0.00,
- payment_method ENUM('card','cash','wallet'),
+ order_id INT UNSIGNED NOT NULL,
+ payment_method ENUM('card','cash','wallet') DEFAULT 'card',
  payment_status ENUM('pending', 'paid', 'failed') DEFAULT 'pending',
  transaction_id VARCHAR(250) DEFAULT NULL, 
  creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -269,12 +267,6 @@ REFERENCES delivery_riders (delivery_rider_id)
 ON DELETE RESTRICT
 ON UPDATE CASCADE;
 
-ALTER TABLE orders ADD CONSTRAINT orders_to_payments_fk 
-FOREIGN KEY (payment_id) 
-REFERENCES payments (payment_id)
-ON DELETE RESTRICT
-ON UPDATE CASCADE;
-
 -- payments to customers and orders
 ALTER TABLE payments ADD CONSTRAINT payments_to_customer_fk 
 FOREIGN KEY (customer_id)
@@ -301,7 +293,7 @@ AS
 SELECT 'admin' AS item_type, COUNT(*) AS entry_count, 
  -- MIN(creation_date) AS oldest_modification,
  ( SELECT concat(
-    first_name,' ', last_name, ' ( ID : ', admin_id, ')', ' modified at ',
+    first_name,' ', last_name, ' (ID : ', admin_id, ')', ' modified at ',
     (SELECT MAX(last_updated) FROM admins))
    FROM admins
    WHERE last_updated = (SELECT MAX(last_updated) FROM admins)
@@ -356,5 +348,5 @@ SELECT 'payments' AS item_type, COUNT(*) AS entry_count,
  MAX(last_updated) AS recent_modification 
 FROM payments
 GROUP BY item_type;
+-- end of file
 
-/* end of file */
