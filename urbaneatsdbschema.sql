@@ -87,6 +87,21 @@ CREATE TABLE delivery_riders (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
+-- Table structure for `opening hours`
+--
+
+CREATE TABLE opening_hours (
+ opening_hour_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+ restaurant_id INT UNSIGNED NOT NULL,
+ day_name ENUM('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun') NOT NULL,
+ opening TIME DEFAULT NULL,
+ closing TIME DEFAULT NULL,
+ creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+ last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ CONSTRAINT opening_hours_pk PRIMARY KEY (opening_hour_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
 -- Table structure for `restaurants`
 --
 
@@ -95,7 +110,7 @@ CREATE TABLE restaurants (
  name  VARCHAR (100) NOT NULL,
  address VARCHAR (250) NOT NULL, 
  city VARCHAR (100) NOT NULL,
- opening_hours MEDIUMTEXT NOT NULL,
+ opening_hours SMALLINT UNSIGNED NOT NULL,
  status ENUM('open','closed'),
  rating DECIMAL (2,1),
  restaurant_manager_id INT UNSIGNED NOT NULL, 
@@ -126,7 +141,7 @@ CREATE TABLE menu_items (
  menu_item_id  INT UNSIGNED NOT NULL AUTO_INCREMENT,
  restaurant_id  INT UNSIGNED NOT NULL,
  name VARCHAR (250) NOT NULL, 
- description MEDIUMTEXT NOT NULL,
+ description TEXT NOT NULL,
  price DECIMAL (12,2) DEFAULT 0.00,
  status ENUM('available','unavailable'),
  category_id INT UNSIGNED NOT NULL, 
@@ -189,10 +204,23 @@ CREATE TABLE payments (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- referential constraints
+-- for opening_hours to restaurants 
+ALTER TABLE opening_hours ADD CONSTRAINT opening_hours_to_restaurants 
+FOREIGN KEY (restaurant_id) 
+REFERENCES restaurants (restaurant_id)
+ON DELETE RESTRICT
+ON UPDATE CASCADE;
+
 -- for restaurants to restaurant managers
 ALTER TABLE restaurants ADD CONSTRAINT restaurants_to_restaurant_managers_fk 
 FOREIGN KEY (restaurant_manager_id) 
 REFERENCES restaurant_managers (restaurant_manager_id)
+ON DELETE RESTRICT
+ON UPDATE CASCADE;
+
+ALTER TABLE restaurants ADD CONSTRAINT restaurants_to_opening_hours_fk 
+FOREIGN KEY (opening_hours) 
+REFERENCES opening_hours (opening_hour_id)
 ON DELETE RESTRICT
 ON UPDATE CASCADE;
 			
@@ -259,5 +287,74 @@ FOREIGN KEY (order_id)
 REFERENCES orders (order_id)
 ON DELETE RESTRICT
 ON UPDATE CASCADE;
+
+--
+-- summary views
+--
+
+CREATE VIEW urbaneats_statistics_vw (
+ item_type,
+ entry_count,
+ -- oldest_modification,
+ recent_activity) 
+AS 
+SELECT 'admin' AS item_type, COUNT(*) AS entry_count, 
+ -- MIN(creation_date) AS oldest_modification,
+ ( SELECT concat(
+    first_name,' ', last_name, ' ( ID : ', admin_id, ')', ' modified at ',
+    (SELECT MAX(last_updated) FROM admins))
+   FROM admins
+   WHERE last_updated = (SELECT MAX(last_updated) FROM admins)
+   ORDER BY last_updated DESC
+   LIMIT 1 
+ ) AS recent_activity
+FROM admins
+GROUP BY item_type
+UNION ALL
+SELECT 'customer' AS item_type, COUNT(*) AS entry_count, 
+ -- MIN(creation_date) AS oldest_modification,
+ ( SELECT concat(
+    first_name,' ', last_name, ' ( ID : ', customer_id, ')', ' modified at ',
+    (SELECT MAX(last_updated) FROM customers))
+   FROM customers
+   WHERE last_updated = (SELECT MAX(last_updated) FROM customers)
+   ORDER BY last_updated DESC
+   LIMIT 1 
+ ) AS recent_activity 
+FROM customers
+GROUP BY item_type
+UNION ALL
+SELECT 'restaurants' AS item_type, COUNT(*) AS entry_count, 
+ -- MIN(creation_date) AS oldest_modification,
+ ( SELECT concat(
+    name, ' ( ID : ', restaurant_id, ')', ' modified at ',
+    (SELECT MAX(last_updated) FROM restaurants))
+   FROM restaurants
+   WHERE last_updated = (SELECT MAX(last_updated) FROM restaurants)
+   ORDER BY last_updated DESC
+   LIMIT 1 
+ ) AS recent_activity
+FROM restaurants
+GROUP BY item_type
+UNION ALL
+SELECT 'delivery riders' AS item_type, COUNT(*) AS entry_count, 
+ -- MIN(creation_date) AS oldest_modification,
+ ( SELECT concat(
+    first_name,' ', last_name, ' ( ID : ', delivery_rider_id, ')', 
+    ' modified at ', 
+    (SELECT MAX(last_updated) FROM delivery_riders))
+   FROM delivery_riders
+   WHERE last_updated = (SELECT MAX(last_updated) FROM admins)
+   ORDER BY last_updated DESC
+   LIMIT 1 
+ ) AS recent_activity
+FROM delivery_riders
+GROUP BY item_type
+UNION ALL
+SELECT 'payments' AS item_type, COUNT(*) AS entry_count, 
+ -- MIN(creation_date) AS oldest_modification,
+ MAX(last_updated) AS recent_modification 
+FROM payments
+GROUP BY item_type;
 
 /* end of file */
