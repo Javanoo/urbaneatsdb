@@ -98,6 +98,7 @@ CREATE TABLE opening_hours (
  closes_at TIME DEFAULT NULL,
  creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ UNIQUE u_idx_restaurant_id_and_day_name (restaurant_id, day_name),
  CONSTRAINT opening_hours_pk PRIMARY KEY (opening_hour_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -110,7 +111,7 @@ CREATE TABLE restaurants (
  name  VARCHAR (100) NOT NULL,
  address VARCHAR (250) NOT NULL, 
  city VARCHAR (100) NOT NULL,
- opening_hours SMALLINT UNSIGNED NOT NULL,
+ opening_hours SMALLINT UNSIGNED DEFAULT NULL,
  status ENUM('open','closed'),
  rating DECIMAL (2,1),
  restaurant_manager_id INT UNSIGNED NOT NULL, 
