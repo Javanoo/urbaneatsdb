@@ -81,8 +81,11 @@ mysql > `source urbaneatsdb_schema.sql urbaneatsdb_data.sql`
 after that, you are good to go. explore and play around with it.
 
 ## Future Improvements
-yeah features and future revisions are inevitable, hence they are welcomed. you might be wondering what features? <br?
+yeah features and future revisions are inevitable, hence they are welcomed. you might be wondering what features? <br>
 well you could : <br>
 
 - create views for various use cases.<br>
 - create procedures/triggers to facilitate consistency and many more, i provided one view but, it barely does anything impressive.
+
+[^1]:Oh aaand, feel free to reach out, whether you need help, want to collab, or just critic, i am open for that, thanks.
+[^2]:ciao!!
