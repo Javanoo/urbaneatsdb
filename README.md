@@ -1,4 +1,4 @@
-# Urbaneats database
+# Urbaneats database 
 ## Introduction
 This is database for a fictitious start up company tending to venture into the food delivery and restaurant <br>
 logistics industry. This repo contains the ER diagram, the schema and dummy data. Should it be fit for you,<br>
@@ -8,6 +8,11 @@ benchmark for your work.
 The main concept of the business model, is that it provides a convinient method of food ordering and customer <br>
 management establishing and easy and trusted network between suppliers and customers.
 
+### Tools
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![SQL](https://img.shields.io/badge/SQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)
+![draw.io](https://img.shields.io/badge/Draw.io-Diagrams-orange?logo=diagramsdotnet)
 ## The ER diagram design - Thought process 
 ![urbanseats ER Diagram](https://github.com/Javanoo/UrbanEatsDb/blob/master/urbaneatsdb.drawio.png)
 The database has the following tables
@@ -86,6 +91,7 @@ well you could : <br>
 
 - create views for various use cases.<br>
 - create procedures/triggers to facilitate consistency and many more, i provided one view but, it barely does anything impressive.
+- can be normalized even further with maintenance in mind of course.
 
 [^1]:Oh aaand, feel free to reach out, whether you need help, want to collab, or just critic, i am open for that, thanks.
 [^2]:ciao!!
