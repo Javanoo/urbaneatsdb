@@ -9,6 +9,7 @@ The main concept of the business model, is that it provides a convinient method 
 management establishing and easy and trusted network between suppliers and customers.
 
 ## The ER diagram design - Thought process 
+![urbanseats ER Diagram](https://github.com/Javanoo/UrbanEatsDb/blob/master/urbaneatsdb.drawio.png)
 The database has the following tables
 ### admins 
 For users who will be administering the system.<br>
@@ -63,4 +64,3 @@ order items( as they are comprised of the order items) and delivery riders (sinc
 ### Payments
 For payment transactions.<br>
 relates with customers (they make the pay) and orders (the are made against a particular order for the customers).
-
