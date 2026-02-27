@@ -66,8 +66,8 @@ For payment transactions.<br>
 relates with customers (they make the pay) and orders (the are made against a particular order for the customers).
 
 ### urbaneats_statistics_vw
-This on is special, as its the only view i have added.<br>
-basicall shows headcount for various tables and recent activity(updates or inserts).
+This one is special, as its the only view i have added.<br>
+basically shows headcount for various tables(users to be specific) and recent activity(updates or inserts).
 
 ## Installations and Try out
 as a prerequisite, you will need a MySQL server and mysql-cli tool, and then you are good to go.<br>
