@@ -64,3 +64,25 @@ order items( as they are comprised of the order items) and delivery riders (sinc
 ### Payments
 For payment transactions.<br>
 relates with customers (they make the pay) and orders (the are made against a particular order for the customers).
+
+### urbaneats_statistics_vw
+This on is special, as its the only view i have added.<br>
+basicall shows headcount for various tables and recent activity(updates or inserts).
+
+## Installations and Try out
+as a prerequisite, you will need a MySQL server and mysql-cli tool, and then you are good to go.<br>
+for installations of these, read <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/"> here</a>
+
+After installing and setting up the server, please download the source file or clone this repo into your local working <br>
+directory and load them through the mysql-cli tool by issuing this command: 
+
+mysql > `source urbaneatsdb_schema.sql urbaneatsdb_data.sql`
+
+after that, you are good to go. explore and play around with it.
+
+## Future Improvements
+yeah features and future revisions are inevitable, hence they are welcomed. you might be wondering what features? <br?
+well you could : <br>
+
+- create views for various use cases.<br>
+- create procedures/triggers to facilitate consistency and many more, i provided one view but, it barely does anything impressive.
