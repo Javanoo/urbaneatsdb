@@ -11,79 +11,36 @@ CREATE DATABASE urbaneatsdb;
 USE urbaneatsdb;
 
 --
--- Table structure for `admins`
+-- Table structure for user_types
 --
 
-CREATE TABLE admins ( 
- admin_id  INT UNSIGNED NOT NULL AUTO_INCREMENT,
- first_name  VARCHAR (50) NOT NULL,
- last_name VARCHAR (50) NOT NULL,
- email VARCHAR(100) DEFAULT NULL,
- phone VARCHAR (10) NOT NULL,
- password_phrase VARCHAR(255) NOT NULL,
- status ENUM('active','suspended') DEFAULT  'active', 
+CREATE TABLE user_types(
+ user_type_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+ name VARCHAR(50),
  creation_date  DATETIME DEFAULT CURRENT_TIMESTAMP,
  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- CONSTRAINT admins_pk PRIMARY KEY (admin_id),
- KEY idx_admins_last_name (last_name),
- UNIQUE idx_admins_email (email)
+ CONSTRAINT admins_pk PRIMARY KEY (user_type_id),
+ UNIQUE idx_name (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Table structure for `customers`
+-- Table structure for `users`
 --
 
-CREATE TABLE customers ( 
- customer_id  INT UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE users ( 
+ user_id  INT UNSIGNED NOT NULL AUTO_INCREMENT,
  first_name  VARCHAR (50) NOT NULL,
  last_name VARCHAR (50) NOT NULL,
  email VARCHAR(100) DEFAULT NULL,
  phone VARCHAR (10) NOT NULL,
  password_phrase VARCHAR(255) NOT NULL,
+ user_type_id SMALLINT UNSIGNED NOT NULL,
  status ENUM('active','suspended') DEFAULT  'active', 
  creation_date  DATETIME DEFAULT CURRENT_TIMESTAMP,
  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- CONSTRAINT customers_pk PRIMARY KEY (customer_id),
- KEY idx_customers_last_name (last_name),
- UNIQUE idx_customers_email (email)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- TABLE structure for `restaurant managers`
---
-
-CREATE TABLE restaurant_managers ( 
- restaurant_manager_id  INT UNSIGNED NOT NULL AUTO_INCREMENT,
- first_name  VARCHAR (50) NOT NULL,
- last_name VARCHAR (50) NOT NULL,
- email VARCHAR(100) DEFAULT NULL,
- phone VARCHAR (10) NOT NULL,
- password_phrase VARCHAR(255) NOT NULL,
- status ENUM('active','suspended') DEFAULT  'active', 
- creation_date  DATETIME DEFAULT CURRENT_TIMESTAMP,
- last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- CONSTRAINT restaurant_managers_pk PRIMARY KEY (restaurant_manager_id),
- KEY idx_restaurant_managers_last_name (last_name),
- UNIQUE idx_restaurant_managers_email (email)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Table structure for `delivery riders`
---
-
-CREATE TABLE delivery_riders ( 
- delivery_rider_id  INT UNSIGNED NOT NULL AUTO_INCREMENT,
- first_name  VARCHAR (50) NOT NULL,
- last_name VARCHAR (50) NOT NULL,
- email VARCHAR(100) DEFAULT NULL,
- phone VARCHAR (10) NOT NULL,
- password_phrase VARCHAR(255) NOT NULL,
- status ENUM('active','suspended') DEFAULT  'active', 
- creation_date  DATETIME DEFAULT CURRENT_TIMESTAMP,
- last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- CONSTRAINT delivery_riders_pk PRIMARY KEY (delivery_rider_id),
- KEY idx_delivery_riders_last_name (last_name),
- UNIQUE idx_delivery_riders_email (email)
+ CONSTRAINT admins_pk PRIMARY KEY (user_id),
+ KEY idx_users_last_name (last_name),
+ UNIQUE idx_users_email (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -114,7 +71,7 @@ CREATE TABLE restaurants (
  opening_hours SMALLINT UNSIGNED DEFAULT NULL,
  status ENUM('open','closed'),
  rating DECIMAL (2,1),
- restaurant_manager_id INT UNSIGNED NOT NULL, 
+ manager_id INT UNSIGNED NOT NULL, -- user of restaurant manager type
  creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  KEY idx_restaurants_name (name),
@@ -174,10 +131,10 @@ CREATE TABLE order_items (
 CREATE TABLE orders ( 
  order_id  INT UNSIGNED NOT NULL AUTO_INCREMENT,
  restaurant_id INT UNSIGNED NOT NULL,
- customer_id INT UNSIGNED NOT NULL, 
+ customer_id INT UNSIGNED NOT NULL, -- user (customer type) 
  order_status ENUM('placed','on_the_way', 'cancelled') DEFAULT 'placed',
  total_amount DECIMAL (12,2) DEFAULT 0.00,
- delivery_rider_id INT UNSIGNED NOT NULL,
+ delivery_rider_id INT UNSIGNED NOT NULL, -- user (delivery rider type)
  pickup_time TIME DEFAULT NULL,
  delivery_time TIME DEFAULT NULL, 
  creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -191,7 +148,7 @@ CREATE TABLE orders (
 
 CREATE TABLE payments ( 
  payment_id  INT UNSIGNED NOT NULL AUTO_INCREMENT,
- customer_id INT UNSIGNED NOT NULL,
+ customer_id INT UNSIGNED NOT NULL, -- user (customer type)
  order_id INT UNSIGNED NOT NULL,
  payment_method ENUM('card','cash','wallet') DEFAULT 'card',
  payment_status ENUM('pending', 'paid', 'failed') DEFAULT 'pending',
@@ -203,6 +160,13 @@ CREATE TABLE payments (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- referential constraints
+-- for users to user types 
+ALTER TABLE users ADD CONSTRAINT users_to_user_types 
+FOREIGN KEY (user_type_id) 
+REFERENCES user_types (user_type_id)
+ON DELETE RESTRICT
+ON UPDATE CASCADE;
+
 -- for opening_hours to restaurants 
 ALTER TABLE opening_hours ADD CONSTRAINT opening_hours_to_restaurants 
 FOREIGN KEY (restaurant_id) 
@@ -212,8 +176,8 @@ ON UPDATE CASCADE;
 
 -- for restaurants to restaurant managers
 ALTER TABLE restaurants ADD CONSTRAINT restaurants_to_restaurant_managers_fk 
-FOREIGN KEY (restaurant_manager_id) 
-REFERENCES restaurant_managers (restaurant_manager_id)
+FOREIGN KEY (manager_id) 
+REFERENCES users (user_id)
 ON DELETE RESTRICT
 ON UPDATE CASCADE;
 
@@ -258,20 +222,20 @@ ON UPDATE CASCADE;
 
 ALTER TABLE orders ADD CONSTRAINT orders_to_customers_fk 
 FOREIGN KEY (customer_id) 
-REFERENCES customers (customer_id)
+REFERENCES users (user_id)
 ON DELETE RESTRICT
 ON UPDATE CASCADE;
 
 ALTER TABLE orders ADD CONSTRAINT orders_to_delivery_riders_fk 
 FOREIGN KEY (delivery_rider_id) 
-REFERENCES delivery_riders (delivery_rider_id)
+REFERENCES users (user_id)
 ON DELETE RESTRICT
 ON UPDATE CASCADE;
 
 -- payments to customers and orders
-ALTER TABLE payments ADD CONSTRAINT payments_to_customer_fk 
+ALTER TABLE payments ADD CONSTRAINT payments_to_users_fk 
 FOREIGN KEY (customer_id)
-REFERENCES customers (customer_id)
+REFERENCES users (user_id)
 ON DELETE RESTRICT
 ON UPDATE CASCADE;
 
@@ -284,7 +248,7 @@ ON UPDATE CASCADE;
 --
 -- summary views
 --
-
+/*
 CREATE VIEW urbaneats_statistics_vw (
  item_type,
  entry_count,
@@ -350,4 +314,4 @@ SELECT 'payments' AS item_type, COUNT(*) AS entry_count,
 FROM payments
 GROUP BY item_type;
 -- end of file
-
+*/
