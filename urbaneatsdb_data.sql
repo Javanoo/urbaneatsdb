@@ -16,35 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Dumping data for table `admins`
---
-
-LOCK TABLES `admins` WRITE;
-/*!40000 ALTER TABLE `admins` DISABLE KEYS */;
-INSERT INTO `admins` VALUES (1,'matthews','siebens','siebens@urbaneats.com','0882930201','ms01ss','active','2026-02-26 07:18:20','2026-02-26 05:18:20'),(2,'simons','kafka','kafkas@urbaneats.com','0882000211','sk01as','active','2026-02-26 07:20:03','2026-02-26 05:20:03'),(3,'jameson','nidir','nidirj@urbaneats.com','0928930015','jn05rn','active','2026-02-26 07:23:01','2026-02-26 05:32:23'),(4,'james','noida','noidaj@urbaneats.com','0993893008','jn08as','active','2026-02-26 07:26:04','2026-02-26 05:26:04'),(5,'mark','dinello','dinellom@urbaneats.com','0893191028','md08ok','active','2026-02-26 07:29:29','2026-02-26 05:29:29');
-/*!40000 ALTER TABLE `admins` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `customers`
---
-
-LOCK TABLES `customers` WRITE;
-/*!40000 ALTER TABLE `customers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `customers` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `delivery_riders`
---
-
-LOCK TABLES `delivery_riders` WRITE;
-/*!40000 ALTER TABLE `delivery_riders` DISABLE KEYS */;
-INSERT INTO `delivery_riders` VALUES (1,'michael','pally','pallym@urbaneats.com','0993893012','mp02yl','active','2026-02-26 07:48:49','2026-02-26 05:48:49'),(2,'keida','noida','noidak@urbaneats.com','0883893008','kn08aa','active','2026-02-26 07:50:37','2026-02-26 05:50:37'),(3,'gerald','nninjaku','nninjakug@urbaneats.com','0982910293','gn03ud','active','2026-02-26 07:52:15','2026-02-26 05:52:15');
-/*!40000 ALTER TABLE `delivery_riders` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Dumping data for table `menu_items`
 --
 
@@ -102,16 +73,6 @@ LOCK TABLES `payments` WRITE;
 UNLOCK TABLES;
 
 --
--- Dumping data for table `restaurant_managers`
---
-
-LOCK TABLES `restaurant_managers` WRITE;
-/*!40000 ALTER TABLE `restaurant_managers` DISABLE KEYS */;
-INSERT INTO `restaurant_managers` VALUES (1,'mark','noida','noidaj@urbaneats.com','0993333008','mn08ak','active','2026-02-26 07:37:48','2026-02-26 05:37:48'),(2,'matthews','javanoo','javanooj@urbaneats.com','0993893117','mj07os','active','2026-02-26 07:39:19','2026-02-26 05:39:19');
-/*!40000 ALTER TABLE `restaurant_managers` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Dumping data for table `restaurants`
 --
 
@@ -119,6 +80,26 @@ LOCK TABLES `restaurants` WRITE;
 /*!40000 ALTER TABLE `restaurants` DISABLE KEYS */;
 INSERT INTO `restaurants` VALUES (1,'melbone apple pie','P.O.Box 1002, Lilongwe, Malawi','Lilongwe',NULL,'open',NULL,2,'2026-02-26 08:03:49','2026-02-26 06:03:49'),(2,'sushi syllup','P.O.Box z10, Blantyre, Malawi','Blantyre',NULL,'open',NULL,2,'2026-02-26 08:04:43','2026-02-26 06:04:43'),(3,'mark chef-array','Area 9, Lilongwe, Malawi','Lilongwe',NULL,'open',NULL,1,'2026-02-26 08:07:11','2026-02-26 06:07:11');
 /*!40000 ALTER TABLE `restaurants` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `user_types`
+--
+
+LOCK TABLES `user_types` WRITE;
+/*!40000 ALTER TABLE `user_types` DISABLE KEYS */;
+INSERT INTO `user_types` VALUES (1,'administrator','2026-02-28 23:11:19','2026-02-28 21:11:19'),(2,'customer','2026-02-28 23:11:32','2026-02-28 21:11:32'),(3,'restaurant manager','2026-02-28 23:11:43','2026-02-28 21:11:43'),(4,'delivery rider','2026-02-28 23:12:02','2026-02-28 21:12:02');
+/*!40000 ALTER TABLE `user_types` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'matthews','siebens','siebens@urbaneats.com','0882930201','ms01ss',1,'active','2026-02-26 07:18:20','2026-02-26 05:18:20'),(2,'simons','kafka','kafkas@urbaneats.com','0882000211','sk01as',1,'active','2026-02-26 07:20:03','2026-02-26 05:20:03'),(3,'jameson','nidir','nidirj@urbaneats.com','0928930015','jn05rn',1,'active','2026-02-26 07:23:01','2026-02-26 05:32:23'),(4,'james','noida','noidaj@urbaneats.com','0993893008','jn08as',1,'active','2026-02-26 07:26:04','2026-02-26 05:26:04'),(5,'mark','dinello','dinellom@urbaneats.com','0893191028','md08ok',1,'active','2026-02-26 07:29:29','2026-02-26 05:29:29'),(6,'michael','pally','pallym@urbaneats.com','0993893012','mp02yl',4,'active','2026-02-26 07:48:49','2026-02-26 05:48:49'),(7,'keida','noida','noidak@urbaneats.com','0883893008','kn08aa',4,'active','2026-02-26 07:50:37','2026-02-26 05:50:37'),(8,'gerald','nninjaku','nninjakug@urbaneats.com','0982910293','gn03ud',4,'active','2026-02-26 07:52:15','2026-02-26 05:52:15'),(12,'mark','noida','noidaj@urbaneats.com','0993333008','mn08ak',3,'active','2026-02-26 07:37:48','2026-02-26 05:37:48'),(13,'matthews','javanoo','javanooj@urbaneats.com','0993893117','mj07os',3,'active','2026-02-26 07:39:19','2026-02-26 05:39:19');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -130,4 +111,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-02-26  9:26:41
+-- Dump completed on 2026-03-01  0:01:07
