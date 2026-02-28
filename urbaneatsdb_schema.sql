@@ -16,10 +16,10 @@ USE urbaneatsdb;
 
 CREATE TABLE user_types(
  user_type_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
- name VARCHAR(50),
+ name VARCHAR(50) NOT NULL,
  creation_date  DATETIME DEFAULT CURRENT_TIMESTAMP,
  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- CONSTRAINT admins_pk PRIMARY KEY (user_type_id),
+ CONSTRAINT user_types_pk PRIMARY KEY (user_type_id),
  UNIQUE idx_name (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -38,9 +38,11 @@ CREATE TABLE users (
  status ENUM('active','suspended') DEFAULT  'active', 
  creation_date  DATETIME DEFAULT CURRENT_TIMESTAMP,
  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- CONSTRAINT admins_pk PRIMARY KEY (user_id),
- KEY idx_users_last_name (last_name),
- UNIQUE idx_users_email (email)
+ CONSTRAINT users_pk PRIMARY KEY (user_id),
+ KEY idx_users_last_name (last_name), -- enable faster retrieval by last name
+ KEY idx_user_types_fk (user_type_id), -- enable faster filter by type
+ KEY idx_users_created_date (creation_date), -- enable faster filter by date
+ UNIQUE idx_users_email (first_name, last_name, email) -- unique email by user
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -55,7 +57,8 @@ CREATE TABLE opening_hours (
  closes_at TIME DEFAULT NULL,
  creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- UNIQUE u_idx_restaurant_id_and_day_name (restaurant_id, day_name),
+ KEY idx_restaurant_id_fk (restaurant_id), -- faster restaurant retrieval 
+ UNIQUE idx_opening_hours_restaurant_id_and_day (restaurant_id, day_name),
  CONSTRAINT opening_hours_pk PRIMARY KEY (opening_hour_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
