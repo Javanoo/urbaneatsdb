@@ -6,7 +6,7 @@ you can use this as a base model for a more refined and professional model, as a
 benchmark for your work.
 
 The main concept of the business model, is that it provides a convinient method of food ordering and customer <br>
-management establishing and easy and trusted network between suppliers and customers.
+management establishing an easy and trusted network between suppliers and customers.
 
 ### Tools
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
@@ -16,26 +16,46 @@ management establishing and easy and trusted network between suppliers and custo
 ## The ER diagram design - Thought process 
 ![urbanseats ER Diagram](https://github.com/Javanoo/UrbanEatsDb/blob/master/urbaneatsdb.drawio.png)
 The database has the following tables
-### admins 
-For users who will be administering the system.<br>
-This table is not related to any other table subject to future changes.
+### Users
+- Abstract model(business logic)
+This table represents any individual of interest to the system. Each user can
+<br> be distinguished from any other by the role they are associated with.<br>
+Any user can fall into one of these roles/types; administrator, customer, <br>
+restaurant manager or delivery rider. With this conceptual set in mind, <br> 
+it is most obvious that the table will have multiple relationships with <br>
+multiple tables to satisfy the dependency of other tables to specific users.<br>
 
-### customers
-For user who will be interating with the system. 
-They may order food, make payments, update their profile and check <br> 
-progress just to mention a few. This table relates to the payments and <br> 
-orders table, as an order / payment belongs to one and one only customer, <br>
-take note that customers can make many payments/orders.
+each user, has a specific function to carry out on the system;<br>
+`customers` - to make orders and payments.<br>
+`adminstrator` - to manage the system.<br>
+`restaurant manager` - to manage various restaurants associated with them.<br>
+`delivery rider` - to make food deliveries to customer.<br>
+With each function outlined, the data stored herein, should facilitate the <br>
+core functionalities of each user as stated above.<br>
 
-### restaurant_managers
-For users who will be managing the online restaurants.
-They may manage the restaurant from time to time hence they relate <br> 
-to the restaurants table (each restaurant should have atleast one manager).
+- conceptual model (logical model)<br>
+This relation, stores the following data;<br>
+  `user_id - of type (INT type)`<br>
+  `first_name,last_name - users first and last name (VARCHAR type)`<br>
+  `email - user's email address (VARCHAR type)`<br> 
+  `phone - user's phone number (VARCHAR type)`<br>
+  `password_phrase - user's hashed password (VARCHAR)`<br>
+  `user_type_id - references the user type table to define user's role` <br>
+  `status - whether user is active or not (ENUM - active/suspended)`<br>
+  `creation_date - stores the user's entry creation date (DATE type)`<br>
+  `last_updated - stores the user's modification date (TIMESTAMP type)`<br> 
+ constraints include;<br>
+ `users_pk - primary key mapped to (user_id)`<br> 
+ `idx_users_last_name index key to enable faster retrieval by last name`<br>
+ `idx_user_types_fk index key to enable faster filter by type`<br>
+ `idx_users_created_date index key to enable faster filter by date`<br>
+ `idx_users_email unique key for unique email by user`<br>
+ Relationships;<br>
+ this table references the user types table for user roles.<br>
+ It is referenced by the payment, order, restaurant tables to associate <br>
+ various entries in those tables with specific users.<br>
+ 
 
-### delivery_riders
-For user who will be delivering food when prepared.
-They may update the system on the pickup and delivery time of the <br> 
-food. Each order has a delivery rider, hence this table related with the orders tables.
 
 ### restaurants
 For online restaurants.
@@ -69,10 +89,6 @@ order items( as they are comprised of the order items) and delivery riders (sinc
 ### Payments
 For payment transactions.<br>
 relates with customers (they make the pay) and orders (the are made against a particular order for the customers).
-
-### urbaneats_statistics_vw
-This one is special, as its the only view i have added.<br>
-basically shows headcount for various tables(users to be specific) and recent activity(updates or inserts).
 
 ## Installations and Try out
 as a prerequisite, you will need a MySQL server and mysql-cli tool, and then you are good to go.<br>
