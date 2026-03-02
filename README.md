@@ -14,7 +14,7 @@ management establishing an easy and trusted network between suppliers and custom
 ![SQL](https://img.shields.io/badge/SQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 ![draw.io](https://img.shields.io/badge/Draw.io-Diagrams-orange?logo=diagramsdotnet)
 ## The ER diagram design - Thought process 
-![urbanseats ER Diagram](https://github.com/Javanoo/UrbanEatsDb/blob/master/urbaneatsdb.drawio.png)
+<!-- ![urbanseats ER Diagram](https://github.com/Javanoo/UrbanEatsDb/blob/master/urbaneatsdb.drawio.png)-->
 The database has the following tables
 ### Users
 - Abstract model(business logic)<br>
