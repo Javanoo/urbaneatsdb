@@ -25,6 +25,7 @@ CREATE TABLE user_types(
 /*
 * indexed name for uniqueness and faster fetch using the name attribute.
 */
+
 --
 -- Table structure for `users`
 --
@@ -43,8 +44,8 @@ CREATE TABLE users (
  CONSTRAINT users_pk PRIMARY KEY (user_id),
  KEY idx_users_last_name (last_name), 
  KEY idx_user_type_id_fk (user_type_id), 
- KEY idx_users_created_date (creation_date), 
- UNIQUE idx_unique_users_email (email)  
+ KEY idx_users_created_date (creation_date),
+ UNIQUE idx_users_email (first_name,last_name, user_type_id, email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*
 * indexed last_name and creation_date for faster fetch using these attributes
@@ -105,15 +106,15 @@ CREATE TABLE addresses (
 CREATE TABLE restaurants ( 
  restaurant_id  INT UNSIGNED NOT NULL AUTO_INCREMENT,
  name  VARCHAR (100) NOT NULL,
- address_id SMALLINT UNSIGNED NOT NULL, 
- city VARCHAR (100) NOT NULL,
+ address_id SMALLINT UNSIGNED NOT NULL,
  status ENUM('open','closed'),
  rating DECIMAL (2,1),
- manager_id INT UNSIGNED NOT NULL, 
+ restaurant_manager_id INT UNSIGNED NOT NULL, 
  creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  KEY idx_restaurants_name (name), 
  KEY idx_restaurants_address_id (address_id),
+ KEY idx_restaurants_restaurant_manager_fk (restaurant_manager_id),
  CONSTRAINT restaurants_pk PRIMARY KEY (restaurant_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*
@@ -187,6 +188,7 @@ CREATE TABLE order_items (
 /*
 * indexed order id and menu item id for faster fetch of tables in joins
 */
+
 --
 -- Table structure for `orders`
 --
@@ -259,7 +261,7 @@ ON UPDATE CASCADE;
 
 -- for restaurants to restaurant managers
 ALTER TABLE restaurants ADD CONSTRAINT restaurants_to_restaurant_managers_fk 
-FOREIGN KEY (manager_id) 
+FOREIGN KEY (restaurant_manager_id) 
 REFERENCES users (user_id)
 ON DELETE RESTRICT
 ON UPDATE CASCADE;
