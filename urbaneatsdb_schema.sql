@@ -41,10 +41,10 @@ CREATE TABLE users (
  creation_date  DATETIME DEFAULT CURRENT_TIMESTAMP,
  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  CONSTRAINT users_pk PRIMARY KEY (user_id),
- KEY idx_users_last_name (last_name), -- enable faster retrieval by last name
- KEY idx_user_type_id_fk (user_type_id), -- enable faster filter by type
- KEY idx_users_created_date (creation_date), -- enable faster filter by date
- UNIQUE idx_unique_users_email (email) -- unique email by user 
+ KEY idx_users_last_name (last_name), 
+ KEY idx_user_type_id_fk (user_type_id), 
+ KEY idx_users_created_date (creation_date), 
+ UNIQUE idx_unique_users_email (email)  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*
 * indexed last_name and creation_date for faster fetch using these attributes
@@ -60,8 +60,8 @@ CREATE TABLE opening_hours (
  opening_hour_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
  restaurant_id INT UNSIGNED NOT NULL,
  day_name ENUM('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun') NOT NULL,
- opens_at TIME DEFAULT NULL,
- closes_at TIME DEFAULT NULL,
+ opens_at TIME DEFAULT '00:00:00',
+ closes_at TIME DEFAULT '23:59:59',
  creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  KEY idx_opening_hours_restaurant_id (restaurant_id),
@@ -73,8 +73,9 @@ CREATE TABLE opening_hours (
 /*
 * indexed opens and closes at for faster fetch of entries based on these 
 * attributes.
-* indexed restaurant_id for faster fetch of tables on join and also here
-* restaurant_id is needed to enforce uniqueness of the entries in 
+* indexed restaurant_id for faster fetch of tables in joins and also here
+* restaurant_id is needed to enforce a restaurant from entering opening hours 
+* on same day.
 */
 
 -- 
@@ -90,13 +91,11 @@ CREATE TABLE addresses (
  creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  KEY idx_addresses_city (city), 
- KEY idx_addresses_ (address_id),
- CONSTRAINT restaurants_pk PRIMARY KEY (restaurant_id)
+ KEY idx_addresses_region (region),
+ CONSTRAINT restaurants_pk PRIMARY KEY (address_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*
-* manager_id is just user_id of the restaurant_manager type.
-* indexed name, for faster fetch of restaurants using the name attribute
-* another index on fk address_id for faster fetch of tables in a join
+* indexed city and region for faster fetch of addresses using these attribute
 */
 
 --
@@ -108,7 +107,6 @@ CREATE TABLE restaurants (
  name  VARCHAR (100) NOT NULL,
  address_id SMALLINT UNSIGNED NOT NULL, 
  city VARCHAR (100) NOT NULL,
- opening_hours SMALLINT UNSIGNED DEFAULT NULL,
  status ENUM('open','closed'),
  rating DECIMAL (2,1),
  manager_id INT UNSIGNED NOT NULL, 
@@ -239,7 +237,7 @@ CREATE TABLE payments (
  CONSTRAINT payments_pk PRIMARY KEY (payment_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*
-* indexxed transaction id, payment status and creation date for faster fetch of 
+* indexed transaction id, payment status and creation date for faster fetch of 
 * payments using these attributes.
 * indexed customer id and order id for faster fetch of tables in joins.
 */
@@ -263,12 +261,6 @@ ON UPDATE CASCADE;
 ALTER TABLE restaurants ADD CONSTRAINT restaurants_to_restaurant_managers_fk 
 FOREIGN KEY (manager_id) 
 REFERENCES users (user_id)
-ON DELETE RESTRICT
-ON UPDATE CASCADE;
-
-ALTER TABLE restaurants ADD CONSTRAINT restaurants_to_opening_hours_fk 
-FOREIGN KEY (opening_hours) 
-REFERENCES opening_hours (opening_hour_id)
 ON DELETE RESTRICT
 ON UPDATE CASCADE;
 
