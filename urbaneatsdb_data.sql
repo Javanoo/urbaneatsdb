@@ -78,7 +78,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `restaurants` WRITE;
 /*!40000 ALTER TABLE `restaurants` DISABLE KEYS */;
-INSERT INTO `restaurants` VALUES (1,'melbone apple pie','P.O.Box 1002, Lilongwe, Malawi','Lilongwe',NULL,'open',NULL,2,'2026-02-26 08:03:49','2026-02-26 06:03:49'),(2,'sushi syllup','P.O.Box z10, Blantyre, Malawi','Blantyre',NULL,'open',NULL,2,'2026-02-26 08:04:43','2026-02-26 06:04:43'),(3,'mark chef-array','Area 9, Lilongwe, Malawi','Lilongwe',NULL,'open',NULL,1,'2026-02-26 08:07:11','2026-02-26 06:07:11');
+INSERT INTO `restaurants` VALUES (1,'melbone apple pie',NUll,'open',NULL,2,'2026-02-26 08:03:49','2026-02-26 06:03:49'),(2,'sushi syllup',NULL,'open',NULL,2,'2026-02-26 08:04:43','2026-02-26 06:04:43'),(3,'mark chef-array',NULL,'open',NULL,1,'2026-02-26 08:07:11','2026-02-26 06:07:11');
 /*!40000 ALTER TABLE `restaurants` ENABLE KEYS */;
 UNLOCK TABLES;
 
