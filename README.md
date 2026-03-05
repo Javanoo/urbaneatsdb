@@ -16,46 +16,12 @@ management establishing an easy and trusted network between suppliers and custom
 ## The ER diagram design - Thought process 
 ![urbanseats ER Diagram](https://github.com/Javanoo/urbaneatsdb/blob/master/urbaneatsdb.drawio.svg)
 The database has the following tables
-### Users
-- Abstract model(business logic)<br>
-  This table represents any individual of interest to the system. Each user can
-  <br> be distinguished from any other by the role they are associated with.<br>
-  Any user can fall into one of these roles/types; administrator, customer, <br>
-  restaurant manager or delivery rider. With this conceptual set in mind, <br> 
-  it is most obvious that the table will have multiple relationships with <br>
-  multiple tables to satisfy the dependency of other tables to specific users.<br>
+### Users_Types
+Holds information about a user's type, which can be either an adminstrator,<br> 
+customer, delivery rider or restaurant manager. Its relationship is with the<br> 
+Users table, described as a one to many, as in one type can be identified by<br> 
+many users.<br>
 
- each user, has a specific function to carry out on the system;<br>
-`customers` - to make orders and payments.<br>
-`adminstrator` - to manage the system.<br>
-`restaurant manager` - to manage various restaurants associated with them.<br>
-`delivery rider` - to make food deliveries to customer.<br> 
- With each function outlined, the data stored herein, should facilitate the <br>
- core functionalities of each user as stated above.<br>
-
--  conceptual model (logical model)<br>
-   This relation, stores the following data;<br>
-  `user_id - of type (INT type)`<br>
-  `first_name,last_name - users first and last name (VARCHAR type)`<br>
-  `email - user's email address (VARCHAR type)`<br> 
-  `phone - user's phone number (VARCHAR type)`<br>
-  `password_phrase - user's hashed password (VARCHAR)`<br>
-  `user_type_id - references the user type table to define user's role` <br>
-  `status - whether user is active or not (ENUM - active/suspended)`<br>
-  `creation_date - stores the user's entry creation date (DATE type)`<br>
-  `last_updated - stores the user's modification date (TIMESTAMP type)`<br> 
-  constraints include;<br>
- `users_pk - primary key mapped to (user_id)`<br>
-  Keys; <br>
- `idx_users_last_name index key to enable faster retrieval by last name`<br>
- `idx_user_types_fk index key to enable faster filter by type`<br>
- `idx_users_created_date index key to enable faster filter by date`<br>
- `idx_users_email unique key for unique email by user`<br>
- Relationships;<br>
- this table references the user types table for user roles.<br>
- It is referenced by the payment, order, restaurant tables to associate <br>
- various entries in those tables with specific users.<br>
- 
 
 
 ### restaurants
