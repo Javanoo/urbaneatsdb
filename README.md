@@ -16,13 +16,27 @@ management establishing an easy and trusted network between suppliers and custom
 ## The ER diagram design - Thought process 
 ![urbanseats ER Diagram](https://github.com/Javanoo/urbaneatsdb/blob/master/urbaneatsdb.drawio.svg)
 The database has the following tables
-### Users_Types
-Holds information about a user's type, which can be either an adminstrator,<br> 
+### Users_types
+Holds information about a user's type, which can be either an administrator,<br> 
 customer, delivery rider or restaurant manager. Its relationship is with the<br> 
-Users table, described as a one to many, as in one type can be identified by<br> 
-many users.<br>
+Users table, described as a one to many, as in one type can be used to<br>
+identify many users.<br>
 
+### Users
+Holds information about users, who can attain the role of an administrator,<br> 
+customer, delivery rider or restaurant manager defined in the user_types<br>
+relation. Unlike user types, this relation interacts with quite a few other<br>
+relations namely the payments, orders, restaurants and user_types(as <br>
+mentioned earlier) relations.<br>
+On top of this, the relation has the following indexes for faster retrieval<br>
+of tuples using various attributes.<br>
 
+indexes: `users_pk`, `idx_users_last_name`, `idx_users_creation_date`<br>
+attributes: `user_id`, `last_name`, `creation_date`, `user_type_id` <br>
+additionally, a special key on the foreign key attribute `user_type_id` to <br>
+facilitate faster table retrievals during relation joins.<br>
+
+Please refer to the ER diagram above if lost at any point.<br>
 
 ### restaurants
 For online restaurants.
