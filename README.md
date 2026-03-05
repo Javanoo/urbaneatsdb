@@ -16,13 +16,13 @@ management establishing an easy and trusted network between suppliers and custom
 ## The ER diagram design - Thought process 
 ![urbanseats ER Diagram](https://github.com/Javanoo/urbaneatsdb/blob/master/urbaneatsdb.drawio.svg)
 The database has the following tables
-### Users_types
+### users_types
 Holds information about a user's type, which can be either an administrator,<br> 
 customer, delivery rider or restaurant manager. Its relationship is with the<br> 
 Users table, described as a one to many, as in one type can be used to<br>
 identify many users.<br>
 
-### Users
+### users
 Holds information about users, who can attain the role of an administrator,<br> 
 customer, delivery rider or restaurant manager defined in the user_types<br>
 relation. Unlike user types, this relation interacts with quite a few other<br>
@@ -39,11 +39,17 @@ facilitate faster table retrievals during relation joins.<br>
 Please refer to the ER diagram above if lost at any point.<br>
 
 ### restaurants
-For online restaurants.
-This relates with the orders table (as each order is directed towards a <br> 
-specific restaurant), menu items ( as each item belongs to a specific restaurant), <br>
-restauarant managers (as depicted in the above discription) and opening hours <br> 
-(as each restaurant has one).
+Holds information about various restaurants available. which includes, <br>
+its name, address, manager, status(whether operating - open or not - closed)<br>
+, rating (automatically generated and ranges out of 5) and various metadata<br>
+about a tuple. This relation interacts with the users relation to establish<br>
+a restaurant manager relationship and other relations refer to it to <br>
+establish their own, relationships.<br>
+it has the following indexes and attributes for faster operations<br>
+
+indexes: `restaurants_pk`, `idx_restaurants_name`, `restaurants_address_id`<br>
+attributes: `restaurant_id`, `name`, `address_id`, `restaurant_manager_id`<br>
+special key on foreign key `restaurant_manager_id` for faster table joins.<br>
 
 ### menu_items
 For online menus belonging to various restaurants.
