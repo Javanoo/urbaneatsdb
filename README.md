@@ -53,8 +53,8 @@ special keys on foreign key `restaurant_id` and unique compound key on
 ### addresses
 Holds information about where a restaurant is situated. common attributes 
 include, street name, city, region and postal code. This relation relates with
-the restaurants relation in a one to many relation as one address can be used 
-to represent multiple restaurant's locations.<br>
+the restaurants relation in a one to one relation as one address can be used 
+to represent a restaurant's location.<br>
 Key indexes supporting faster operations include<br>
 
 indices: `idx_addresses_city`, `idx_addresses_region`, 
@@ -154,7 +154,8 @@ for installations of these, read <a href="https://dev.mysql.com/doc/mysql-instal
 After installing and setting up the server, please download the source file or clone this repo into your local working <br>
 directory and load them through the mysql-cli tool by issuing this command: 
 
-mysql > `source urbaneatsdb_schema.sql urbaneatsdb_data.sql`
+`mysql > source urbaneatsdb_schema.sql` 
+`mysql > urbaneatsdb_data.sql`
 
 after that, you are good to go. explore and play around with it.
 
