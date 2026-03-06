@@ -93,7 +93,7 @@ CREATE TABLE addresses (
  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  KEY idx_addresses_city (city), 
  KEY idx_addresses_region (region),
- CONSTRAINT restaurants_pk PRIMARY KEY (address_id)
+ CONSTRAINT addresses_pk PRIMARY KEY (address_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*
 * indexed city and region for faster fetch of addresses using these attribute
