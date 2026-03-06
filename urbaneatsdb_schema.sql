@@ -34,7 +34,7 @@ CREATE TABLE users (
  user_id  INT UNSIGNED NOT NULL AUTO_INCREMENT,
  first_name  VARCHAR (50) NOT NULL,
  last_name VARCHAR (50) NOT NULL,
- email VARCHAR(100) DEFAULT NULL,
+ email VARCHAR(100) NOT NULL,
  phone VARCHAR (20) NOT NULL,
  password_phrase VARCHAR(255) NOT NULL,
  user_type_id SMALLINT UNSIGNED NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE users (
  KEY idx_users_last_name (last_name), 
  KEY idx_user_type_id_fk (user_type_id), 
  KEY idx_users_created_date (creation_date),
- UNIQUE idx_users_email (first_name,last_name, user_type_id, email)
+ UNIQUE idx_users_email (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*
 * indexed last_name and creation_date for faster fetch using these attributes
