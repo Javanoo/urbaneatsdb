@@ -102,7 +102,7 @@ The relation has the following index keys: <br>
 
 indices: `menu_item_category_pk`<br>
 attributes: `menu_item_category_id`, `name`<br>
-special key on unique compound key `name` for unique entries.<br>
+special key on unique key `name` for unique entries.<br>
 
 
 ### Order items
