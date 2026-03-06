@@ -86,7 +86,7 @@ CREATE TABLE opening_hours (
 CREATE TABLE addresses ( 
  address_id  SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
  street_name  VARCHAR (100) NOT NULL,
- postal_code SMALLINT UNSIGNED NOT NULL, 
+ postal_code VARCHAR(50) NOT NULL, 
  city VARCHAR (100) NOT NULL,
  region ENUM('northern', 'central', 'southern') NOT NULL DEFAULT 'central',
  creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -107,8 +107,8 @@ CREATE TABLE restaurants (
  restaurant_id  INT UNSIGNED NOT NULL AUTO_INCREMENT,
  name  VARCHAR (100) NOT NULL,
  address_id SMALLINT UNSIGNED NOT NULL,
- status ENUM('open','closed'),
- rating DECIMAL (2,1),
+ status ENUM('open','closed') DEFAULT 'open',
+ rating DECIMAL (2,1) CHECK (rating >= 0.0 AND rating <= 5.0),
  restaurant_manager_id INT UNSIGNED NOT NULL, 
  creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -196,12 +196,13 @@ CREATE TABLE order_items (
 CREATE TABLE orders ( 
  order_id  INT UNSIGNED NOT NULL AUTO_INCREMENT,
  restaurant_id INT UNSIGNED NOT NULL,
- customer_id INT UNSIGNED NOT NULL, -- user (customer type) 
- order_status ENUM('placed','on the way', 'canceled') DEFAULT 'placed',
+ customer_id INT UNSIGNED NOT NULL,  
+ order_status ENUM('placed','preparing','on the way', 'delivered', 'canceled') 
+ DEFAULT 'placed',
  total_amount DECIMAL (12,2) DEFAULT 0.00,
- delivery_rider_id INT UNSIGNED NOT NULL, -- user (delivery rider type)
- pickup_time TIME DEFAULT NULL,
- delivery_time TIME DEFAULT NULL, 
+ delivery_rider_id INT UNSIGNED, 
+ pickup_time DATETIME DEFAULT NULL,
+ delivery_time DATETIME DEFAULT NULL, 
  creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  KEY idx_orders_restaurant_id (restaurant_id),
@@ -224,7 +225,7 @@ CREATE TABLE orders (
 
 CREATE TABLE payments ( 
  payment_id  INT UNSIGNED NOT NULL AUTO_INCREMENT,
- customer_id INT UNSIGNED NOT NULL, -- user (customer type)
+ customer_id INT UNSIGNED NOT NULL, 
  order_id INT UNSIGNED NOT NULL,
  payment_method ENUM('card','cash','wallet') DEFAULT 'card',
  payment_status ENUM('pending', 'paid', 'failed') DEFAULT 'pending',
