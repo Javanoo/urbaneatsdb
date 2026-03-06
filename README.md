@@ -13,7 +13,7 @@ management establishing an easy and trusted network between suppliers and custom
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 ![SQL](https://img.shields.io/badge/SQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 ![draw.io](https://img.shields.io/badge/Draw.io-Diagrams-orange?logo=diagramsdotnet)
-## The ER diagram design - Thought process 
+## The ER diagram design(Crows foot notation) - Thought process 
 ![urbanseats ER Diagram](https://github.com/Javanoo/urbaneatsdb/blob/master/urbaneatsdb.drawio.svg)
 The database has the following tables
 ### users_types
