@@ -5,8 +5,8 @@ logistics industry. This repo contains the ER diagram, the schema and dummy data
 you can use this as a base model for a more refined and professional model, as a learning resource and/or as a <br> 
 benchmark for your work.
 
-The main concept of the business model, is that it provides a convinient method of food ordering and customer <br>
-management establishing an easy and trusted network between suppliers and customers.
+The main concept of the business model, is that, providing a convenient method of food ordering and customer <br>
+management - establishing an easy and trusted network between suppliers and customers.
 
 ### Tools
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
@@ -160,7 +160,7 @@ directory and load the scripts through the mysql-cli tool by issuing these two c
 This should set up the whole database for you, ready for testing.
 
 ## Future Improvements
-yeah features and future revisions are inevitable, hence they are welcomed. you might be wondering what features? <br>
+Features and future revisions are inevitable, hence they are welcomed. you might be wondering what features? <br>
 well you could : <br>
 
 - create views for various use cases.<br>
