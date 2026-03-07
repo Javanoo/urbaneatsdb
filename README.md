@@ -147,17 +147,17 @@ attributes: `payment_id`, `payment_status`, `creation_date`, `restaurant_id`<br>
 special key on foreign keys `restaurant_id`,`customer_id`, `order_id`<br> 
 
 
-## Installations and Try out
-as a prerequisite, you will need a MySQL server and mysql-cli tool, and then you are good to go.<br>
+## Installation and Testing
+As a prerequisite, you will need a MySQL server and mysql-cli tool.<br>
 for installations of these, read <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/"> here</a>
 
 After installing and setting up the server, please download the source file or clone this repo into your local working <br>
-directory and load them through the mysql-cli tool by issuing this command: 
+directory and load the scripts through the mysql-cli tool by issuing these two commands: 
 
 `mysql > source urbaneatsdb_schema.sql` 
-`mysql > urbaneatsdb_data.sql`
+`mysql > source urbaneatsdb_data.sql`
 
-after that, you are good to go. explore and play around with it.
+This should set up the whole database for you, ready for testing.
 
 ## Future Improvements
 yeah features and future revisions are inevitable, hence they are welcomed. you might be wondering what features? <br>
