@@ -167,5 +167,3 @@ well you could : <br>
 - create procedures/triggers to facilitate consistency and many more, i provided one view but, it barely does anything impressive.
 - can be normalized even further with maintenance in mind of course.
 
-[^1]:Oh aaand, feel free to reach out, whether you need help, want to collab, or just critic, i am open for that, thanks.
-[^2]:ciao!!
