@@ -335,4 +335,55 @@ ON UPDATE CASCADE;
 -- Triggers 
 --
 
+
+-- 
+-- customer_payments view
+--
+
+CREATE VIEW customer_payments_view (
+customer_id,
+full_name,
+payment_status,
+order_id,
+restaurant,
+paid_date
+)AS
+SELECT py.customer_id, concat( cu.first_name, cu.last_name) AS full_name,
+py.payment_status, py.order_id, rs.name, py.creation_date
+FROM users AS cu
+INNER JOIN payments AS py ON cu.user_id = py.customer_id
+INNER JOIN orders AS ors ON py.order_id = ors.order_id
+INNER JOIN restaurants AS rs ON ors.restaurant_id = rs.restaurant_id;
+
+--
+-- users_statistics
+--
+CREATE VIEW users_statistics (
+user_role, active, suspended, total_head_count
+)AS
+SELECT user_role, active, suspended, total_head_count
+(SELECT "administrator" AS user_role, 
+(SELECT count(*) FROM users WHERE status = 'active' AND 'administrator' = (
+ SELECT name FROM user_type AS ut WHERE ut.user_type_id = 
+ users.user_type_id)) AS active,
+ (SELECT count(*) FROM users WHERE status = 'suspended' AND 'administrator' = (
+ SELECT name FROM user_type AS ut WHERE ut.user_type_id = 
+ users.user_type_id)) AS suspended, sum(active, suspended) AS total_head_count
+ UNION ALL
+ SELECT "customer" AS user_role, 
+(SELECT count(*) FROM users WHERE status = 'active' AND 'customer' = (
+ SELECT name FROM user_type AS ut WHERE ut.user_type_id = 
+ users.user_type_id)) AS active,
+ (SELECT count(*) FROM users WHERE status = 'suspended' AND 'customer' = (
+ SELECT name FROM user_type AS ut WHERE ut.user_type_id = 
+ users.user_type_id)) AS suspended, sum(active, suspended) AS total_head_count
+ UNION ALL
+ SELECT "administrator" AS user_role, 
+(SELECT count(*) FROM users WHERE status = 'active' AND 'delivery rider' = (
+ SELECT name FROM user_type AS ut WHERE ut.user_type_id = 
+ users.user_type_id)) AS active,
+ (SELECT count(*) FROM users WHERE status = 'suspended' AND 'delivery rider' = (
+ SELECT name FROM user_type AS ut WHERE ut.user_type_id = 
+ users.user_type_id)) AS suspended, sum(active, suspended) AS total_head_count)
+
 -- end of file
