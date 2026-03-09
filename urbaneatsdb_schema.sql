@@ -332,9 +332,33 @@ ON DELETE RESTRICT
 ON UPDATE CASCADE;
 
 --
--- Triggers 
+-- Triggers on order_items table 
 --
-
+DELIMETER ;;
+CREATE TRIGGER update_order_amount_on_insert AFTER INSERT ON order_items
+FOR EACH ROW 
+ BEGIN
+  UPDATE orders 
+  SET total_amount = SUM(
+   SELECT price FROM order_items AS oi WHERE oi.order_id = orders.order_id)
+  WHERE orders.order_id = new.order_id;
+ END;;
+ 
+ CREATE TRIGGER update_order_amount_on_update AFTER UPDATE ON order_items
+ FOR EACH ROW 
+ BEGIN
+  UPDATE orders 
+  SET total_amount = SUM(
+   SELECT price FROM order_items AS oi WHERE oi.order_id = orders.order_id)
+  WHERE orders.order_id = new.order_id;
+ END;;
+ 
+DELIMETER;
+/*
+* update the total amount of an order, when an insert or update happens on the 
+* order_items table.
+*/
+  
 
 -- 
 -- customer_payments view
@@ -345,21 +369,26 @@ customer_id,
 full_name,
 payment_status,
 order_id,
+amount,
 restaurant,
 paid_date
 )AS
 SELECT py.customer_id, concat( cu.first_name, cu.last_name) AS full_name,
-py.payment_status, py.order_id, rs.name, py.creation_date
+py.payment_status, py.order_id, ors.total_amount, rs.name, py.creation_date
 FROM users AS cu
 INNER JOIN payments AS py ON cu.user_id = py.customer_id
 INNER JOIN orders AS ors ON py.order_id = ors.order_id
 INNER JOIN restaurants AS rs ON ors.restaurant_id = rs.restaurant_id;
 
 --
--- users_statistics
+-- users_statistics view
 --
+
 CREATE VIEW users_statistics (
-user_role, active, suspended, total_head_count
+user_role, 
+active, 
+suspended, 
+total_head_count
 )AS
 SELECT user_role, active, suspended, total_head_count
 (SELECT "administrator" AS user_role, 
