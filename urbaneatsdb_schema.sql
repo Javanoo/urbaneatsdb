@@ -332,8 +332,9 @@ ON DELETE RESTRICT
 ON UPDATE CASCADE;
 
 --
--- Triggers on order_items table 
+-- Triggers on `order_items` table 
 --
+
 DELIMETER ;;
 CREATE TRIGGER update_order_amount_on_insert AFTER INSERT ON order_items
 FOR EACH ROW 
@@ -361,7 +362,7 @@ DELIMETER;
   
 
 -- 
--- customer_payments view
+-- View structure for `customer_payments_view`
 --
 
 CREATE VIEW customer_payments_view (
@@ -381,10 +382,10 @@ INNER JOIN orders AS ors ON py.order_id = ors.order_id
 INNER JOIN restaurants AS rs ON ors.restaurant_id = rs.restaurant_id;
 
 --
--- users_statistics view
+-- View structure for `users_statistics_view`
 --
 
-CREATE VIEW users_statistics (
+CREATE VIEW users_statistics_view (
 user_role, 
 active, 
 suspended, 
@@ -392,27 +393,54 @@ total_head_count
 )AS
 SELECT user_role, active, suspended, total_head_count
 (SELECT "administrator" AS user_role, 
-(SELECT count(*) FROM users WHERE status = 'active' AND 'administrator' = (
- SELECT name FROM user_type AS ut WHERE ut.user_type_id = 
- users.user_type_id)) AS active,
- (SELECT count(*) FROM users WHERE status = 'suspended' AND 'administrator' = (
- SELECT name FROM user_type AS ut WHERE ut.user_type_id = 
- users.user_type_id)) AS suspended, sum(active, suspended) AS total_head_count
+ (SELECT count(*) 
+  FROM users 
+  WHERE status = 'active' 
+  AND 'administrator' = (
+   SELECT name 
+   FROM user_type AS ut 
+   WHERE ut.user_type_id = users.user_type_id)) AS active,
+ (SELECT count(*) 
+  FROM users 
+  WHERE status = 'suspended' 
+  AND 'administrator' = (
+   SELECT name 
+   FROM user_type AS ut 
+   WHERE ut.user_type_id = 
+   users.user_type_id)) AS suspended, sum(active, suspended) AS total_head_count
  UNION ALL
- SELECT "customer" AS user_role, 
-(SELECT count(*) FROM users WHERE status = 'active' AND 'customer' = (
- SELECT name FROM user_type AS ut WHERE ut.user_type_id = 
- users.user_type_id)) AS active,
- (SELECT count(*) FROM users WHERE status = 'suspended' AND 'customer' = (
- SELECT name FROM user_type AS ut WHERE ut.user_type_id = 
- users.user_type_id)) AS suspended, sum(active, suspended) AS total_head_count
+SELECT "customer" AS user_role, 
+(SELECT count(*) 
+ FROM users 
+ WHERE status = 'active' 
+ AND 'customer' = (
+  SELECT name 
+  FROM user_type AS ut 
+  WHERE ut.user_type_id = users.user_type_id)) AS active,
+(SELECT count(*) 
+ FROM users 
+ WHERE status = 'suspended' 
+ AND 'customer' = (
+  SELECT name 
+  FROM user_type AS ut 
+  WHERE ut.user_type_id = 
+  users.user_type_id)) AS suspended, sum(active, suspended) AS total_head_count
  UNION ALL
- SELECT "administrator" AS user_role, 
-(SELECT count(*) FROM users WHERE status = 'active' AND 'delivery rider' = (
- SELECT name FROM user_type AS ut WHERE ut.user_type_id = 
- users.user_type_id)) AS active,
- (SELECT count(*) FROM users WHERE status = 'suspended' AND 'delivery rider' = (
- SELECT name FROM user_type AS ut WHERE ut.user_type_id = 
+SELECT "administrator" AS user_role, 
+(SELECT count(*) 
+ FROM users 
+ WHERE status = 'active' 
+ AND 'delivery rider' = (
+  SELECT name 
+  FROM user_type AS ut 
+  WHERE ut.user_type_id = users.user_type_id)) AS active,
+(SELECT count(*) 
+ FROM users 
+ WHERE status = 'suspended' 
+ AND 'delivery rider' = (
+  SELECT name 
+  FROM user_type AS ut 
+  WHERE ut.user_type_id = 
  users.user_type_id)) AS suspended, sum(active, suspended) AS total_head_count)
 
 -- end of file
