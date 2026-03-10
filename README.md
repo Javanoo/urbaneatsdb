@@ -163,7 +163,9 @@ This should set up the whole database for you, ready for testing.
 Features and future revisions are inevitable, hence they are welcomed. you might be wondering what features? <br>
 well you could : <br>
 
-- create views for various use cases.<br>
-- create procedures/triggers to facilitate consistency and many more, i provided one view but, it barely does anything impressive.
-- can be normalized even further with maintenance in mind of course.
+- create more views for various use cases, this db has the following views for a start: <br> 
+  1. user statistics 
+  2. customer payments
+- create procedures/triggers to facilitate consistency and many more. like the views, i have included some triggers as well
+- can be normalized even further with maintenance in mind of course, like the city attribute having its own table for scalability.
 
