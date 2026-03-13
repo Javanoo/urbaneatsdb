@@ -105,7 +105,7 @@ attributes: `menu_item_category_id`, `name`<br>
 special key on unique key `name` for unique entries.<br>
 
 
-### Order items
+### order_items
 Hold information about with menu item has been included in an order by a 
 customer. As such this relation relates with the menu items relation in a one
 to one relationship as each order item references one menu item and it also
@@ -117,7 +117,7 @@ indices: `order_items_pk`<br>
 attributes: `order_item_id`, `menu_item_id`, `order_id`<br>
 special key on foreign keys `order_id` and `menu_item_id`<br>
 
-### Orders
+### orders
 Holds information regarding an order placed by a customer. This relation relates
 with various relations to establish references necessary for defining the order
 such as customer, restaurant and delivery rider data. The relationships with
@@ -131,7 +131,7 @@ attributes: `order_id`, `pickup_time`, `order_status`, `restaurant_id`,
 special key on foreign keys `restaurant_id`,`customer_id` and
 `delivery_rider_id` 
 
-### Payments
+### payments
 Holds information about a payment initiated by a customer. This relation 
 relates with the customer and orders relations for references on data to 
 satisfy the payments definition. The relationship between this relation and
