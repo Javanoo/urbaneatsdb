@@ -384,7 +384,7 @@ INNER JOIN restaurants AS rs ON ors.restaurant_id = rs.restaurant_id;
 --
 -- View structure for `users_statistics_view`
 --
-/*
+
 CREATE VIEW users_statistics_view (
 user_role, 
 active, 
@@ -408,40 +408,6 @@ FROM
    SELECT name 
    FROM user_type AS ut 
    WHERE ut.user_type_id = 
-   users.user_type_id)) AS suspended, sum(active, suspended) AS total_head_count
- UNION ALL
-SELECT "customer" AS user_role, 
-(SELECT count(*) 
- FROM users 
- WHERE status = 'active' 
- AND 'customer' = (
-  SELECT name 
-  FROM user_type AS ut 
-  WHERE ut.user_type_id = users.user_type_id)) AS active,
-(SELECT count(*) 
- FROM users 
- WHERE status = 'suspended' 
- AND 'customer' = (
-  SELECT name 
-  FROM user_type AS ut 
-  WHERE ut.user_type_id = 
-  users.user_type_id)) AS suspended, sum(active, suspended) AS total_head_count
- UNION ALL
-SELECT "administrator" AS user_role, 
-(SELECT count(*) 
- FROM users 
- WHERE status = 'active' 
- AND 'delivery rider' = (
-  SELECT name 
-  FROM user_type AS ut 
-  WHERE ut.user_type_id = users.user_type_id)) AS active,
-(SELECT count(*) 
- FROM users 
- WHERE status = 'suspended' 
- AND 'delivery rider' = (
-  SELECT name 
-  FROM user_type AS ut 
-  WHERE ut.user_type_id = 
- users.user_type_id)) AS suspended, sum(active, suspended) AS total_head_count)*/
+   users.user_type_id)) AS suspended, sum(active, suspended) AS total_head_count;
 
 -- end of file
