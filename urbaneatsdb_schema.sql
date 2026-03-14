@@ -334,14 +334,14 @@ ON UPDATE CASCADE;
 --
 -- Triggers on `order_items` table 
 --
-
+/*
 DELIMITER ;;
 CREATE TRIGGER update_order_amount_on_insert AFTER INSERT ON order_items
 FOR EACH ROW 
  BEGIN
   UPDATE orders 
   SET total_amount = SUM(
-   (SELECT price FROM order_items AS oi WHERE oi.order_id = orders.order_id))
+   (SELECT price FROM order_items AS oi WHERE oi.order_id = new.order_id))
   WHERE orders.order_id = new.order_id;
  END;;
  
@@ -350,11 +350,11 @@ FOR EACH ROW
  BEGIN
   UPDATE orders 
   SET total_amount = SUM(
-   (SELECT price FROM order_items AS oi WHERE oi.order_id = orders.order_id))
+   (SELECT price FROM order_items AS oi WHERE oi.order_id = new.order_id))
   WHERE orders.order_id = new.order_id;
  END;;
  
-DELIMITER ;
+DELIMITER ;*/
 /*
 * update the total amount of an order, when an insert or update happens on the 
 * order_items table.
