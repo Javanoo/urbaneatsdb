@@ -436,4 +436,24 @@ FROM restaurants AS rs
 INNER JOIN users ON rs.restaurant_manager_id = users.user_id
 INNER JOIN addresses ON rs.address_id = addresses.address_id;
 
+--
+-- view structure for delivery_riders_view
+-- 
+
+CREATE VIEW delivery_riders_view (
+user_id,
+first_name,
+last_name,
+email,
+phone,
+status,
+created_date
+)AS 
+SELECT user_id, first_name, last_name, 
+concat(LEFT(email,3), "***", RIGHT(email,2)) AS email, 
+phone, status, DATE(creation_date)
+FROM users 
+WHERE users.user_type_id = (SELECT user_type_id FROM user_types WHERE name = 'delivery rider');
+
+
 -- end of file
