@@ -391,23 +391,25 @@ active,
 suspended, 
 total_head_count
 )AS
-SELECT user_role, active, suspended, total_head_count
-FROM
-(SELECT "administrator" AS user_role, 
- (SELECT count(*) 
-  FROM users 
-  WHERE status = 'active' 
-  AND 'administrator' = (
-   SELECT name 
-   FROM user_type AS ut 
-   WHERE ut.user_type_id = users.user_type_id)) AS active,
- (SELECT count(*) 
-  FROM users 
-  WHERE status = 'suspended' 
-  AND 'administrator' = (
-   SELECT name 
-   FROM user_type AS ut 
-   WHERE ut.user_type_id = 
-   users.user_type_id)) AS suspended, sum(active, suspended) AS total_head_count;
+SELECT users.user_type_id AS usr, name, 
+count((SELECT user_id FROM users WHERE user_type_id = usr.user_type_id AND status = 'active')) AS active,
+count((SELECT user_id FROM users WHERE user_type_id = usr.user_type_id AND status = 'suspended')) AS suspended
+FROM users;
+
+CREATE VIEW customers_view (
+user_id,
+first_name,
+last_name,
+email,
+phone,
+status,
+created_date
+)AS 
+SELECT user_id, first_name, last_name, 
+concat(LEFT(email,3), "***", RIGHT(email,2)) AS email, 
+phone, status, creation_date
+FROM users 
+WHERE users.user_type_id = (SELECT user_type_id FROM user_types WHERE name = 'customer');
+
 
 -- end of file
