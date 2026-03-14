@@ -382,22 +382,6 @@ INNER JOIN orders AS ors ON py.order_id = ors.order_id
 INNER JOIN restaurants AS rs ON ors.restaurant_id = rs.restaurant_id;
 
 --
--- View structure for `users_statistics_view`
---
-/*
-CREATE VIEW users_statistics_view (
-user_role, 
-active, 
-suspended, 
-total_head_count
-)AS
-SELECT users.user_type_id AS usr, name, 
-count((SELECT user_id FROM users WHERE user_type_id = usr.user_type_id AND status = 'active')) AS active,
-count((SELECT user_id FROM users WHERE user_type_id = usr.user_type_id AND status = 'suspended')) AS suspended
-FROM users;
-*/
-
---
 -- view structure for customers_view
 -- 
 
