@@ -384,7 +384,7 @@ INNER JOIN restaurants AS rs ON ors.restaurant_id = rs.restaurant_id;
 --
 -- View structure for `users_statistics_view`
 --
-
+/*
 CREATE VIEW users_statistics_view (
 user_role, 
 active, 
@@ -395,6 +395,11 @@ SELECT users.user_type_id AS usr, name,
 count((SELECT user_id FROM users WHERE user_type_id = usr.user_type_id AND status = 'active')) AS active,
 count((SELECT user_id FROM users WHERE user_type_id = usr.user_type_id AND status = 'suspended')) AS suspended
 FROM users;
+*/
+
+--
+-- view structure for customers_view
+-- 
 
 CREATE VIEW customers_view (
 user_id,
@@ -407,9 +412,28 @@ created_date
 )AS 
 SELECT user_id, first_name, last_name, 
 concat(LEFT(email,3), "***", RIGHT(email,2)) AS email, 
-phone, status, creation_date
+phone, status, DATE(creation_date)
 FROM users 
 WHERE users.user_type_id = (SELECT user_type_id FROM user_types WHERE name = 'customer');
 
+--
+-- view structure for restaurants_view
+--
+
+CREATE VIEW restaurants_view (
+restaurant_id,
+name,
+manager,
+status,
+address,
+phone,
+created_date
+)AS 
+SELECT rs.restaurant_id, rs.name, concat(first_name, " ", last_name) AS manager,
+rs.status, concat(postal_code,', ',street_name,', ', city) as address,
+phone, DATE(rs.creation_date)  
+FROM restaurants AS rs 
+INNER JOIN users ON rs.restaurant_manager_id = users.user_id
+INNER JOIN addresses ON rs.address_id = addresses.address_id;
 
 -- end of file
