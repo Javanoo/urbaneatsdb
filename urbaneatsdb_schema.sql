@@ -455,5 +455,23 @@ phone, status, DATE(creation_date)
 FROM users 
 WHERE users.user_type_id = (SELECT user_type_id FROM user_types WHERE name = 'delivery rider');
 
+--
+-- view structure for admins_view
+-- 
+
+CREATE VIEW admins_view (
+user_id,
+first_name,
+last_name,
+email,
+phone,
+status,
+created_date
+)AS 
+SELECT user_id, first_name, last_name, 
+concat(LEFT(email,3), "***", RIGHT(email,2)) AS email, 
+phone, status, DATE(creation_date)
+FROM users 
+WHERE users.user_type_id = (SELECT user_type_id FROM user_types WHERE name = 'administrator');
 
 -- end of file
