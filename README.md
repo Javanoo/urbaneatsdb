@@ -166,6 +166,10 @@ well you could : <br>
 - create more views for various use cases, this db has the following views for a start: <br> 
   1. user statistics 
   2. customer payments
+  3. customer 
+  4. restaurants
+  5. delivery riders
+  6. admins
 - create procedures/triggers to facilitate consistency and many more. like the views, i have included some triggers as well
 - can be normalized even further with maintenance in mind of course, like the city attribute having its own table for scalability.
 
