@@ -61,9 +61,47 @@ UNLOCK TABLES;
 
 LOCK TABLES `order_items` WRITE;
 /*!40000 ALTER TABLE `order_items` DISABLE KEYS */;
-INSERT INTO `order_items` VALUES (2,1,1,2,23999.98,'2026-03-14 08:58:28','2026-03-14 06:58:28'),(3,1,3,2,3999.98,'2026-03-14 08:59:51','2026-03-14 06:59:51'),(4,2,2,5,34999.95,'2026-03-14 09:03:18','2026-03-14 07:03:18'),(5,1,1,1,11999.99,'2026-03-14 09:03:47','2026-03-14 07:03:47'),(6,4,4,1,8999.99,'2026-03-14 09:04:24','2026-03-14 07:04:24'),(7,5,3,1,1999.99,'2026-03-14 09:04:46','2026-03-14 07:04:46');
+INSERT INTO `order_items` VALUES (2,1,1,2,23999.98,'2026-03-14 08:58:28','2026-03-14 06:58:28'),(3,3,3,2,3999.98,'2026-03-14 08:59:51','2026-03-15 06:17:40'),(4,2,2,5,34999.95,'2026-03-14 09:03:18','2026-03-14 07:03:18'),(5,1,1,1,11999.99,'2026-03-14 09:03:47','2026-03-14 07:03:47'),(6,4,4,1,8999.99,'2026-03-14 09:04:24','2026-03-14 07:04:24'),(7,5,3,1,1999.99,'2026-03-14 09:04:46','2026-03-14 07:04:46');
 /*!40000 ALTER TABLE `order_items` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_order_amount_on_insert` AFTER INSERT ON `order_items` FOR EACH ROW BEGIN
+  UPDATE orders 
+  SET total_amount = (SELECT SUM(price) FROM order_items WHERE order_items.order_id = new.order_id)
+  WHERE orders.order_id = new.order_id;
+ END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_order_amount_on_update` AFTER UPDATE ON `order_items` FOR EACH ROW BEGIN
+  UPDATE orders 
+  SET total_amount = (SELECT SUM(price) FROM order_items WHERE order_items.order_id = new.order_id)
+  WHERE orders.order_id = new.order_id;
+ END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Dumping data for table `orders`
@@ -71,7 +109,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (1,1,4,'placed',0.00,NULL,NULL,NULL,'2026-03-14 07:51:27','2026-03-14 05:51:27'),(2,1,4,'placed',0.00,NULL,NULL,NULL,'2026-03-14 07:51:39','2026-03-14 05:51:39'),(3,1,5,'placed',0.00,NULL,NULL,NULL,'2026-03-14 07:51:45','2026-03-14 05:51:45'),(4,1,5,'placed',0.00,NULL,NULL,NULL,'2026-03-14 07:51:50','2026-03-14 05:51:50'),(5,1,5,'placed',0.00,NULL,NULL,NULL,'2026-03-14 07:52:00','2026-03-14 05:52:00');
+INSERT INTO `orders` VALUES (1,1,4,'placed',35999.97,8,NULL,NULL,'2026-03-14 07:51:27','2026-03-15 07:24:18'),(2,1,4,'placed',34999.95,8,NULL,NULL,'2026-03-14 07:51:39','2026-03-15 07:24:18'),(3,1,5,'placed',3999.98,8,NULL,NULL,'2026-03-14 07:51:45','2026-03-15 07:24:18'),(4,1,5,'placed',8999.99,8,NULL,NULL,'2026-03-14 07:51:50','2026-03-15 07:24:18'),(5,1,5,'placed',1999.99,8,NULL,NULL,'2026-03-14 07:52:00','2026-03-15 07:24:18');
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -81,6 +119,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `payments` WRITE;
 /*!40000 ALTER TABLE `payments` DISABLE KEYS */;
+INSERT INTO `payments` VALUES (1,4,1,'card','paid','trans_id:1001@TrNdmmY','2026-03-15 08:33:05','2026-03-15 06:33:05'),(2,5,4,'card','paid','trans_id:44321@TrNdmmY','2026-03-15 09:19:42','2026-03-15 07:19:42');
 /*!40000 ALTER TABLE `payments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -123,4 +162,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-03-14  9:06:03
+-- Dump completed on 2026-03-15  9:25:08
